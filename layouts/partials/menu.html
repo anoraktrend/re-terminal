@@ -5,21 +5,10 @@
     <span class="hamburger"></span>
   </button>
   <ul class="menu-items">
-   <li><a href="/">HOME</a></li>
-   <li><a href="/about">ABOUT</a></li>
-   <li><a href="/books">BOOKS</a></li>
-   <li><a href="/now">NOW</a></li>
-   <li><a href="/images">PHOTOS</a></li>
-   <li><a href="/music">MUSIC</a></li>
-   <li class="dropdown">
-     <a href="#" class="dropdown-toggle" id="dropdown-toggle">MORE</a>
-       <div id="myDropdown" class="dropdown-content">
-       <a href="/stuff">Stuff</a>
-       <a href="/archives">Archives</a>
-       <a href="/blogroll">Blogroll</a>
-	   <a href="/feeds">RSS Feeds</a>
-       <a href="https://stats.thelinuxcast.org/share/IadIb2YQcsPRUiem/mtwb.blog">Stats</a>
-       </div>
-    </li> 
+    {{ range .Site.Menus.main }}
+      {{ if not .HasChildren }}
+        <li><a href="{{ .URL }}"{{ if .Params.newTab }} target="_blank" rel="noopener"{{ end }}>{{ upper .Name }}</a></li>
+      {{ end }}
+    {{ end }}
   </ul>
 </div>

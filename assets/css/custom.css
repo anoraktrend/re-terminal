@@ -96,21 +96,55 @@
   --bg-tertiary: #313244;
   --text-primary: #cdd6f4;
   --text-secondary: #bac2de;
-  --text-link: #89b4fa;
-  --accent: #89b4fa;
-  --accent-hover: #74c7ec;
+  --text-link: #b4befe;
+  --accent: #b4befe;
+  --accent-hover: #cba6f7;
   --accent-secondary: #a6e3a1;
   --accent-tertiary: #fab387;
   --accent-video: #f38ba8;
-  --border: #89b4fa;
+  --border: #b4befe;
   --menu-bg: #1e1e2e;
   --menu-text: #cdd6f4;
   --dropdown-bg: #313244;
   --logo-primary: #cdd6f4;
-  --logo-secondary: #89b4fa;
-  --logo-hover-primary: #89b4fa;
+  --logo-secondary: #b4befe;
+  --logo-hover-primary: #cba6f7;
   --logo-hover-secondary: #cdd6f4;
   --hamburger-color: #cdd6f4;
+
+  /* Base theme variables */
+  --background: #1e1e2e;
+  --color: #cdd6f4;
+  --menu-color: #cdd6f4;
+  --border-color: rgba(205, 214, 244, 0.1);
+  --accent-contrast-color: #1e1e2e;
+
+  /* Code highlighting */
+  --syntax-code-background: #181825;
+  --syntax-punctuation-color: #bac2de;
+  --syntax-comment-color: #7f849c;
+  --syntax-keyword-color: #cba6f7;
+  --syntax-string-color: #a6e3a1;
+  --syntax-number-color: #fab387;
+  --syntax-function-color: #89b4fa;
+  --syntax-name-color: #cdd6f4;
+  --syntax-type-color: #f9e2af;
+  --syntax-operator-color: #89dceb;
+  --syntax-tag-color: #f38ba8;
+  --syntax-attr-color: #fab387;
+  --syntax-error-color: #f38ba8;
+  --syntax-builtin-color: #f9e2af;
+  --syntax-variable-color: #f5e0dc;
+  --syntax-addition-color: #a6e3a1;
+  --syntax-deletion-color: #f38ba8;
+  --syntax-line-highlight-color: #cdd6f4;
+  --syntax-line-highlight-box-shadow: #cdd6f4;
+  --syntax-line-highlight-background-color: hsla(228, 20%, 50%, 0.3);
+  --syntax-code-border-color: rgba(205, 214, 244, 0.15);
+  --syntax-code-copy-button-background: rgba(205, 214, 244, 0.15);
+  --syntax-code-copy-button-color: #bac2de;
+  --syntax-code-copy-button-box-shadow-color: rgba(0, 0, 0, 0.2);
+  --link-post-background: #313244;
 }
 
 [data-theme-family="catppuccin"][data-theme-variant="light"] {
@@ -120,20 +154,58 @@
   --text-primary: #4c4f69;
   --text-secondary: #5c5f77;
   --text-link: #1e66f5;
-  --accent: #1e66f5;
-  --accent-hover: #04a5e5;
+  --accent: #7287fd;
+  --accent-hover: #8839ef;
   --accent-secondary: #40a02b;
   --accent-tertiary: #fe640b;
   --accent-video: #d20f39;
-  --border: #1e66f5;
+  --border: #7287fd;
   --menu-bg: #dce0e8;
   --menu-text: #4c4f69;
   --dropdown-bg: #bcc0cc;
   --logo-primary: #4c4f69;
-  --logo-secondary: #1e66f5;
-  --logo-hover-primary: #04a5e5;
+  --logo-secondary: #7287fd;
+  --logo-hover-primary: #8839ef;
   --logo-hover-secondary: #4c4f69;
   --hamburger-color: #4c4f69;
+
+  /* Base theme variables */
+  --background: #eff1f5;
+  --color: #4c4f69;
+  --menu-color: #4c4f69;
+  --border-color: rgba(76, 79, 105, 0.1);
+  --accent-contrast-color: #1e1e2e;
+
+  /* Code highlighting */
+  --syntax-code-background: #e6e9ef;
+  --syntax-func-color: color-mix(in srgb, #7287fd 70%, #4c4f69 30%);
+  --syntax-var-color: color-mix(in srgb, #7287fd 90%, transparent);
+  --syntax-value-color: color-mix(in srgb, #7287fd 85%, #4c4f69 15%);
+  --syntax-punctuation-color: #6c6f85;
+  --syntax-comment-color: #8c8fa1;
+  --syntax-keyword-color: #8839ef;
+  --syntax-string-color: #40a02b;
+  --syntax-number-color: #fe640b;
+  --syntax-function-color: #1e66f5;
+  --syntax-name-color: #4c4f69;
+  --syntax-type-color: #df8e1d;
+  --syntax-operator-color: #04a5e5;
+  --syntax-tag-color: #d20f39;
+  --syntax-attr-color: #fe640b;
+  --syntax-error-color: #d20f39;
+  --syntax-builtin-color: #df8e1d;
+  --syntax-variable-color: #dc8a78;
+  --syntax-addition-color: #40a02b;
+  --syntax-deletion-color: #d20f39;
+  --syntax-line-highlight-mix: color-mix(in srgb, #7287fd 90%, #4c4f69 10%);
+  --syntax-line-highlight-color: #4c4f69;
+  --syntax-line-highlight-box-shadow: #4c4f69;
+  --syntax-line-highlight-background-color: hsla(228, 20%, 50%, 0.15);
+  --syntax-code-border-color: rgba(76, 79, 105, 0.12);
+  --syntax-code-copy-button-background: rgba(76, 79, 105, 0.1);
+  --syntax-code-copy-button-color: #4c4f69;
+  --syntax-code-copy-button-box-shadow-color: rgba(0, 0, 0, 0.1);
+  --link-post-background: #dce0e8;
 }
 
 [data-theme-family="high-contrast"][data-theme-variant="dark"] {
@@ -828,6 +900,21 @@ body {
   height: 0.9em !important;
   width: auto !important;
 }
+.calls svg {
+  width: 1.5em;
+  height: 1.5em;
+  flex-shrink: 0;
+  object-fit: contain;
+  vertical-align: middle;
+}
+.calls svg.rss-icon {
+  height: 1.1em;
+  width: 1.1em;
+}
+.calls svg.email-icon {
+  height: 1.2em;
+  width: 1.2em;
+}
 
 @media (max-width: 768px) {
   .calls {
@@ -892,7 +979,7 @@ body {
     margin-bottom: -0.2em;
 }
 
-.logo .matts {
+.logo .logo-primary {
     color: var(--logo-primary);
     font-size: 6em;
     letter-spacing: 0.12em;
@@ -902,7 +989,7 @@ body {
     padding: 0;
 }
 
-.logo .blog {
+.logo .logo-secondary {
     color: var(--logo-secondary);
     font-size: 6em;
     letter-spacing: 0.12em;
@@ -912,46 +999,46 @@ body {
     padding: 0;
 }
 
-a:hover .logo .matts {
+a:hover .logo .logo-primary {
     color: var(--logo-hover-primary);
     font-size: 6em;
     letter-spacing: 0.12em;
 }
 
-a:hover .logo .blog {
+a:hover .logo .logo-secondary {
     color: var(--logo-hover-secondary);
     font-size: 6em;
     letter-spacing: 0.12em;
 }
 
 @media (max-width: 1200px) {
-    .logo .matts, .logo .blog, a:hover .logo .matts, a:hover .logo .blog {
+    .logo .logo-primary, .logo .logo-secondary, a:hover .logo .logo-primary, a:hover .logo .logo-secondary {
         font-size: 5em;
     }
 }
 
 @media (max-width: 992px) {
-    .logo .matts, .logo .blog, a:hover .logo .matts, a:hover .logo .blog {
+    .logo .logo-primary, .logo .logo-secondary, a:hover .logo .logo-primary, a:hover .logo .logo-secondary {
         font-size: 4em;
     }
 }
 
 @media (max-width: 768px) {
-    .logo .matts, .logo .blog, a:hover .logo .matts, a:hover .logo .blog {
+    .logo .logo-primary, .logo .logo-secondary, a:hover .logo .logo-primary, a:hover .logo .logo-secondary {
         font-size: 3em;
         letter-spacing: 0.08em;
     }
 }
 
 @media (max-width: 576px) {
-    .logo .matts, .logo .blog, a:hover .logo .matts, a:hover .logo .blog {
+    .logo .logo-primary, .logo .logo-secondary, a:hover .logo .logo-primary, a:hover .logo .logo-secondary {
         font-size: 2.5em;
         letter-spacing: 0.06em;
     }
 }
 
 @media (max-width: 400px) {
-    .logo .matts, .logo .blog, a:hover .logo .matts, a:hover .logo .blog {
+    .logo .logo-primary, .logo .logo-secondary, a:hover .logo .logo-primary, a:hover .logo .logo-secondary {
         font-size: 2em;
         letter-spacing: 0.04em;
     }
@@ -3355,4 +3442,243 @@ a.read-more:active {
 
 .fedicomment-counter-link:hover {
   text-decoration: underline !important;
+}
+
+/* Hugo Chroma syntax highlighting.
+   The site builds with noClasses = false so these rules follow the active
+   Catppuccin palette instead of Chroma's inline Monokai colours. */
+.post-content pre.chroma {
+  background: var(--syntax-code-background, var(--bg-secondary)) !important;
+  color: var(--text-primary) !important;
+  border-top-color: var(--syntax-code-border-color, rgba(127, 127, 127, 0.2));
+  border-bottom-color: var(--syntax-code-border-color, rgba(127, 127, 127, 0.2));
+}
+
+.chroma .c,
+.chroma .ch,
+.chroma .cm,
+.chroma .c1,
+.chroma .cs,
+.chroma .cp,
+.chroma .cpf {
+  color: var(--syntax-comment-color, var(--text-secondary));
+  font-style: italic;
+}
+
+.chroma .err {
+  color: var(--syntax-error-color, var(--accent-video));
+}
+
+.chroma .k,
+.chroma .kc,
+.chroma .kd,
+.chroma .kn,
+.chroma .kp,
+.chroma .kr {
+  color: var(--syntax-keyword-color, var(--accent));
+}
+
+.chroma .kt {
+  color: var(--syntax-type-color, var(--accent));
+}
+
+.chroma .o,
+.chroma .ow {
+  color: var(--syntax-operator-color, var(--accent));
+}
+
+.chroma .p,
+.chroma .pi,
+.chroma .ps {
+  color: var(--syntax-punctuation-color, var(--text-primary));
+}
+
+.chroma .n,
+.chroma .na,
+.chroma .nb,
+.chroma .bp,
+.chroma .nc,
+.chroma .no,
+.chroma .nd,
+.chroma .ni,
+.chroma .ne,
+.chroma .nl,
+.chroma .nn,
+.chroma .nx,
+.chroma .py,
+.chroma .nt,
+.chroma .nv,
+.chroma .vc,
+.chroma .vg,
+.chroma .vi,
+.chroma .vm,
+.chroma .w {
+  color: var(--syntax-name-color, var(--text-primary));
+}
+
+.chroma .na {
+  color: var(--syntax-attr-color, var(--accent-tertiary));
+}
+
+.chroma .nb,
+.chroma .bp,
+.chroma .gh,
+.chroma .gu {
+  color: var(--syntax-builtin-color, var(--accent));
+}
+
+.chroma .nc,
+.chroma .nn {
+  color: var(--syntax-type-color, var(--accent));
+}
+
+.chroma .nf,
+.chroma .fm {
+  color: var(--syntax-function-color, var(--accent));
+}
+
+.chroma .nt {
+  color: var(--syntax-tag-color, var(--accent-video));
+}
+
+.chroma .nv,
+.chroma .vc,
+.chroma .vg,
+.chroma .vi,
+.chroma .vm {
+  color: var(--syntax-variable-color, var(--text-primary));
+}
+
+.chroma .s,
+.chroma .sa,
+.chroma .sb,
+.chroma .sc,
+.chroma .dl,
+.chroma .sd,
+.chroma .s2,
+.chroma .se,
+.chroma .sh,
+.chroma .si,
+.chroma .sx,
+.chroma .sr,
+.chroma .s1,
+.chroma .ss {
+  color: var(--syntax-string-color, var(--accent-secondary));
+}
+
+.chroma .m,
+.chroma .mb,
+.chroma .mf,
+.chroma .mh,
+.chroma .mi,
+.chroma .il,
+.chroma .mo {
+  color: var(--syntax-number-color, var(--accent-tertiary));
+}
+
+.chroma .gd {
+  color: var(--syntax-deletion-color, var(--accent-video));
+}
+
+.chroma .gi {
+  color: var(--syntax-addition-color, var(--accent-secondary));
+}
+
+.chroma .gs {
+  font-weight: bold;
+}
+
+.chroma .ge {
+  font-style: italic;
+}
+
+/* Prism re-highlights code in the browser and replaces Chroma's spans with
+   .token classes. These overrides keep that client-side pass on-palette. */
+.post-content .token.comment,
+.post-content .token.prolog,
+.post-content .token.doctype,
+.post-content .token.cdata {
+  color: var(--syntax-comment-color) !important;
+  font-style: italic;
+}
+
+.post-content .token.keyword,
+.post-content .token.control,
+.post-content .token.directive,
+.post-content .token.statement,
+.post-content .token.atrule {
+  color: var(--syntax-keyword-color) !important;
+}
+
+.post-content .token.string,
+.post-content .token.attr-value,
+.post-content .token.char,
+.post-content .token.regex {
+  color: var(--syntax-string-color) !important;
+}
+
+.post-content .token.number,
+.post-content .token.boolean,
+.post-content .token.constant,
+.post-content .token.symbol {
+  color: var(--syntax-number-color) !important;
+}
+
+.post-content .token.function,
+.post-content .token.function-name,
+.post-content .token.property {
+  color: var(--syntax-function-color) !important;
+}
+
+.post-content .token.operator,
+.post-content .token.entity {
+  color: var(--syntax-operator-color) !important;
+}
+
+.post-content .token.punctuation {
+  color: var(--syntax-punctuation-color) !important;
+}
+
+.post-content .token.parameter,
+.post-content .token.variable {
+  color: var(--syntax-variable-color) !important;
+}
+
+.post-content .token.tag,
+.post-content .token.selector {
+  color: var(--syntax-tag-color) !important;
+}
+
+.post-content .token.attr-name,
+.post-content .token.class-name {
+  color: var(--syntax-attr-color) !important;
+}
+
+.post-content .token.builtin {
+  color: var(--syntax-builtin-color) !important;
+}
+
+.post-content .token.deleted {
+  color: var(--syntax-deletion-color) !important;
+}
+
+.post-content .token.inserted {
+  color: var(--syntax-addition-color) !important;
+}
+
+.post-content .token.important {
+  color: var(--syntax-keyword-color) !important;
+  font-weight: bold;
+}
+
+.post-content .token.namespace {
+  opacity: 0.7 !important;
+}
+
+.post-content .token.bold {
+  font-weight: bold;
+}
+
+.post-content .token.italic {
+  font-style: italic;
 }

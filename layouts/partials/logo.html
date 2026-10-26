@@ -1,5 +1,7 @@
-<a href="{{ if $.Site.Params.Logo.LogoHomeLink }}{{ $.Site.Params.Logo.LogoHomeLink }}{{else}}{{ $.Site.BaseURL }}{{ end }}">
+{{- $logoPrimary := $.Site.Params.logo.logoPrimary | default $.Site.Title -}}
+{{- $logoSecondary := $.Site.Params.logo.logoSecondary -}}
+<a href="{{ if $.Site.Params.logo.logoHomeLink }}{{ $.Site.Params.logo.logoHomeLink }}{{ else }}{{ $.Site.BaseURL }}{{ end }}">
      <h1 class="logo">
-         <span class="matts">MATT'S</span> <span class="blog"> BLOG</span>
+         <span class="logo-primary">{{ $logoPrimary }}</span>{{ with $logoSecondary }}<span class="logo-secondary">{{ . }}</span>{{ end }}
      </h1>
 </a>

@@ -493,7 +493,9 @@
        ═══════════════════════════════════════════════════════════════════════ -->
   <footer class="lb-footer">
     <p class="lb-updated">Data updated {{ now.Format "Jan 2, 2006 15:04 MST" }}</p>
-    <p class="lb-profile"><a href="https://listenbrainz.org/user/mtwb/">View full profile on ListenBrainz →</a></p>
+    {{ with site.Params.listenBrainzUser }}
+    <p class="lb-profile"><a href="https://listenbrainz.org/user/{{ . }}/">View full profile on ListenBrainz →</a></p>
+    {{ end }}
   </footer>
 
 </div>

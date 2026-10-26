@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const themeToggleButton = document.getElementById('theme-toggle-button');
   const currentThemeName = document.getElementById('current-theme-name');
   const themeOptions = document.querySelectorAll('.theme-option');
+  const docEl = document.documentElement;
 
   const themes = {
     'gruvbox': { name: 'Gruvbox', displayName: 'Gruvbox' },
@@ -36,8 +37,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Check if random mode is enabled
   const isRandomMode = localStorage.getItem('randomTheme') === 'true';
-  let currentThemeFamily = localStorage.getItem('themeFamily') || 'gruvbox';
-  const currentThemeVariant = localStorage.getItem('themeVariant') || 'dark';
+  let currentThemeFamily = localStorage.getItem('themeFamily') || docEl.getAttribute('data-theme-family') || 'gruvbox';
+  const currentThemeVariant = localStorage.getItem('themeVariant') || docEl.getAttribute('data-theme-variant') || 'dark';
 
   // If random mode is enabled, select a random theme on page load
   if (isRandomMode) {
@@ -56,9 +57,8 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function applyTheme(family, variant) {
-    const html = document.documentElement;
-    html.setAttribute('data-theme-family', family);
-    html.setAttribute('data-theme-variant', variant);
+    docEl.setAttribute('data-theme-family', family);
+    docEl.setAttribute('data-theme-variant', variant);
 
     localStorage.setItem('themeFamily', family);
     localStorage.setItem('themeVariant', variant);
@@ -142,12 +142,12 @@ document.addEventListener('DOMContentLoaded', function() {
   themeOptions.forEach(option => {
     option.addEventListener('click', function() {
       const selectedFamily = this.dataset.theme;
-      const currentVariant = localStorage.getItem('themeVariant') || 'dark';
+      const currentVariant = localStorage.getItem('themeVariant') || docEl.getAttribute('data-theme-variant') || 'dark';
 
       // Handle random theme selection
       if (selectedFamily === 'random') {
         localStorage.setItem('randomTheme', 'true');
-        const randomFamily = getRandomTheme(localStorage.getItem('themeFamily'));
+        const randomFamily = getRandomTheme(localStorage.getItem('themeFamily') || docEl.getAttribute('data-theme-family'));
         applyTheme(randomFamily, currentVariant);
         if (currentThemeName) {
           currentThemeName.textContent = 'random';
@@ -163,8 +163,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   if (themeToggle) {
     themeToggle.addEventListener('click', function() {
-      const currentFamily = localStorage.getItem('themeFamily') || 'gruvbox';
-      const currentVariant = localStorage.getItem('themeVariant') || 'dark';
+      const currentFamily = localStorage.getItem('themeFamily') || docEl.getAttribute('data-theme-family') || 'gruvbox';
+      const currentVariant = localStorage.getItem('themeVariant') || docEl.getAttribute('data-theme-variant') || 'dark';
       const newVariant = currentVariant === 'dark' ? 'light' : 'dark';
       applyTheme(currentFamily, newVariant);
     });

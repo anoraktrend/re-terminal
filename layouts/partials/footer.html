@@ -1,20 +1,34 @@
 <footer class="footer">
   <div class="footer__inner">
-    {{ if $.Site.Params.Copyright }}
-      <div class="copyright copyright--user">
-        <span>{{ $.Site.Params.Copyright | safeHTML }}</span>
-    {{ else }}
-      <div class="copyright">
-        <span>© Matthew Weber {{ now.Year }} | Follow Me on <a rel="me" href="https://fosstodon.org/@mtwb">Mastodon</a> | <a href="/changelog/">v3.4.0</a></span>
-    {{ end }}
-      </div>
+    {{ $social := $.Site.Params.social }}
+    <div class="copyright copyright--user">
+      <span>
+        {{ with $.Site.Params.copyright }}{{ . | safeHTML }}{{ else }}© {{ now.Year }} {{ $.Site.Title }}{{ end }}
+        {{ with $social }}
+          {{ with .fediverse }}
+            | <a rel="me" href="{{ . }}">Find me on {{ $social.fediverseLabel | default "the Fediverse" }}</a>
+          {{ end }}
+          {{ with .github }}
+            | <a href="{{ . }}">GitHub</a>
+          {{ end }}
+          {{ with .youtube }}
+            | <a href="{{ . }}">YouTube</a>
+          {{ end }}
+          {{ with .rss }}
+            | <a href="{{ . | relURL }}">RSS</a>
+          {{ end }}
+        {{ end }}
+      </span>
+    </div>
   </div>
+  {{ with $.Site.Params.hyvorWebsiteId }}
     <script src="https://talk.hyvor.com/embed/comment-counts.js"></script>
     <script>
     hyvorTalkCommentCounts.load({
-        "website-id": 13540
+        "website-id": {{ . | jsonify }}
     })
     </script>
+  {{ end }}
 </footer>
 
 {{ $menu := resources.Get "js/menu.js" | js.Build }}
