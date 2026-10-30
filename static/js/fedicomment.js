@@ -13,11 +13,19 @@
 
 class FediComment {
   constructor(config) {
+    const container = typeof config.containerEl === 'string'
+      ? document.querySelector(config.containerEl)
+      : config.containerEl;
+    const data = container?.dataset || {};
+
     this.config = {
       containerEl: config.containerEl,
-      instanceUrl: config.instanceUrl?.replace(/\/$/, ''), // Remove trailing slash
-      statusId: config.statusId,
-      username: config.username, // Username for reply link
+      // The Hugo partial puts the same values on the container so the Worker
+      // can render the thread at the edge. Explicit options still win.
+      instanceUrl: String(config.instanceUrl || data.fedicommentInstance || '').replace(/\/$/, ''),
+      statusId: String(config.statusId || data.fedicommentStatus || ''),
+      username: String(config.username || data.fedicommentUsername || ''),
+      platform: String(config.platform || data.fedicommentPlatform || 'mastodon'),
       loadButtonText: config.loadButtonText || 'Load Comments from Fediverse',
       replyButtonText: config.replyButtonText || 'Reply on Fediverse',
       noCommentsText: config.noCommentsText || 'No comments yet. Be the first to reply!',
@@ -26,9 +34,7 @@ class FediComment {
       dateFormat: config.dateFormat || 'relative' // 'relative' or 'absolute'
     };
 
-    this.container = typeof this.config.containerEl === 'string'
-      ? document.querySelector(this.config.containerEl)
-      : this.config.containerEl;
+    this.container = container;
 
     if (!this.container) {
       console.error('FediComment: Container element not found');
@@ -44,6 +50,13 @@ class FediComment {
   }
 
   init() {
+    // The Worker may have already rendered the thread into the page. Keep the
+    // server-rendered comments instead of adding a second copy or a load button.
+    if (this.container.dataset.fedicommentRendered ||
+        this.container.querySelector('.fedicomment-wrapper')) {
+      return;
+    }
+
     // Create load button
     const loadButton = document.createElement('button');
     loadButton.className = 'fedicomment-load-btn';
@@ -61,15 +74,9 @@ class FediComment {
     }
 
     try {
-      const response = await fetch(
-        `${this.config.instanceUrl}/api/v1/statuses/${this.config.statusId}/context`
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
+      const data = this.config.platform === 'wafrn'
+        ? await this.fetchWafrnComments()
+        : await this.fetchMastodonComments();
 
       // Remove load button
       if (loadButton) {
@@ -88,6 +95,106 @@ class FediComment {
     }
   }
 
+  async fetchMastodonComments() {
+    const response = await fetch(
+      `${this.config.instanceUrl}/api/v1/statuses/${this.config.statusId}/context`
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return response.json();
+  }
+
+  async fetchWafrnComments() {
+    const [response, environment] = await Promise.all([
+      fetch(`${this.config.instanceUrl}/api/forum/${this.config.statusId}`),
+      this.fetchWafrnEnvironment().catch(error => {
+        console.warn('FediComment: Failed to load Wafrn environment', error);
+        return {};
+      })
+    ]);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return { descendants: this.mapWafrnPosts(data, environment) };
+  }
+
+  async fetchWafrnEnvironment() {
+    if (this.wafrnEnvironment) {
+      return this.wafrnEnvironment;
+    }
+
+    const response = await fetch(`${this.config.instanceUrl}/api/environment`);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    this.wafrnEnvironment = await response.json();
+    return this.wafrnEnvironment;
+  }
+
+  wafrnAvatarUrl(user, environment) {
+    if (!user.id) {
+      return '';
+    }
+
+    // Wafrn serves cached avatars through its v2 API. The instance itself
+    // proxies the same endpoint, so it is a safe fallback when the cache
+    // domain is unavailable.
+    const cacheDomain = (environment.cacheDomain || this.config.instanceUrl)
+      .replace(/\/$/, '');
+
+    return `${cacheDomain}/api/v2/cache/avatar/${encodeURIComponent(user.id)}?format=avif&size=medium`;
+  }
+
+  mapWafrnPosts(data, environment = {}) {
+    const users = new Map(
+      (data.users || []).map(user => [user.id, user])
+    );
+
+    return (data.posts || [])
+      .filter(post => !post.isReblog)
+      .map(post => {
+        const user = users.get(post.userId) || {};
+        const avatar = this.wafrnAvatarUrl(user, environment);
+        const username = (user.url || '').replace(/^@/, '');
+        const profileUrl = user.url
+          ? `${this.config.instanceUrl}/blog/${user.url}`
+          : this.config.instanceUrl;
+
+        return {
+          id: post.id,
+          content: post.content || post.markdownContent || '',
+          created_at: post.createdAt,
+          in_reply_to_id: post.parentId,
+          url: `${this.config.instanceUrl}/fediverse/post/${post.id}`,
+          account: {
+            id: user.id || post.userId,
+            username,
+            acct: username,
+            display_name: this.stripHtml(user.name || username),
+            avatar,
+            url: profileUrl
+          },
+          favourites_count: 0,
+          reblogs_count: 0,
+          emojis: []
+        };
+      });
+  }
+
+  stripHtml(html) {
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    return div.textContent || div.innerText || '';
+  }
+
   renderComments(data) {
     const descendants = data.descendants || [];
 
@@ -98,7 +205,9 @@ class FediComment {
     // Add reply button to original post
     const replyButton = document.createElement('a');
     replyButton.className = 'fedicomment-reply-btn';
-    replyButton.href = `${this.config.instanceUrl}/@${this.config.username || 'user'}/${this.config.statusId}`;
+    replyButton.href = this.config.platform === 'wafrn'
+      ? `${this.config.instanceUrl}/fediverse/post/${this.config.statusId}`
+      : `${this.config.instanceUrl}/@${this.config.username || 'user'}/${this.config.statusId}`;
     replyButton.target = '_blank';
     replyButton.rel = 'noopener noreferrer';
     replyButton.textContent = this.config.replyButtonText;

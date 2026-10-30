@@ -1,9 +1,9 @@
-name = "re-Terminal"
+name = "re-Terminal (Helltop variant)"
 license = "MIT"
-licenselink = "https://github.com/mirus-ua/hugo-theme-re-terminal/blob/main/LICENSE.md"
-description = "A simple, retro theme for Hugo."
-homepage = "https://github.com/mirus-ua/hugo-theme-re-terminal/"
-demosite = "https://re-terminal.nebrowser.com"
+licenselink = "https://github.com/anoraktrend/re-terminal/blob/main/LICENSE.md"
+description = "A simple, retro theme for Hugo. Helltop variant with FediComment/Wafrn and ListenBrainz extras."
+homepage = "https://github.com/anoraktrend/re-terminal/"
+demosite = "https://helltop.net"
 tags = [
   "blog",
   "clean",
@@ -20,7 +20,7 @@ tags = [
   "retro",
 ]
 features = ["blog", "shortcode", "syntax highlighting"]
-min_version = 0.128
+min_version = 0.168
 
 [author]
 name = "Mirus"

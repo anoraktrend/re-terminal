@@ -6,16 +6,17 @@
 class FediCommentCounter {
   constructor() {
     this.CACHE_KEY = 'fedicomment-counts';
+    this.CACHE_VERSION = 'v2';
     this.CACHE_TTL = 3600000; // 1 hour in milliseconds
   }
 
   /**
    * Get cached count for a status
    */
-  getCachedCount(statusId) {
+  getCachedCount(cacheKey) {
     try {
       const cache = JSON.parse(localStorage.getItem(this.CACHE_KEY) || '{}');
-      const cached = cache[statusId];
+      const cached = cache[cacheKey];
 
       if (cached && (Date.now() - cached.timestamp) < this.CACHE_TTL) {
         return cached.count;
@@ -29,10 +30,10 @@ class FediCommentCounter {
   /**
    * Save count to cache
    */
-  saveToCache(statusId, count) {
+  saveToCache(cacheKey, count) {
     try {
       const cache = JSON.parse(localStorage.getItem(this.CACHE_KEY) || '{}');
-      cache[statusId] = {
+      cache[cacheKey] = {
         count: count,
         timestamp: Date.now()
       };
@@ -43,11 +44,14 @@ class FediCommentCounter {
   }
 
   /**
-   * Fetch comment count from Mastodon API
+   * Fetch comment count from the Fediverse
    */
-  async fetchCommentCount(instance, statusId) {
+  async fetchCommentCount(instance, statusId, platform) {
     try {
-      const response = await fetch(`${instance}/api/v1/statuses/${statusId}/context`);
+      const endpoint = platform === 'wafrn'
+        ? `${instance}/api/forum/${statusId}`
+        : `${instance}/api/v1/statuses/${statusId}/context`;
+      const response = await fetch(endpoint);
 
       if (!response.ok) {
         if (response.status === 429) {
@@ -57,7 +61,9 @@ class FediCommentCounter {
       }
 
       const data = await response.json();
-      const count = data.descendants?.length || 0;
+      const count = platform === 'wafrn'
+        ? (data.posts?.filter(post => !post.isReblog).length || 0)
+        : (data.descendants?.length || 0);
 
       return count;
     } catch (error) {
@@ -86,8 +92,14 @@ class FediCommentCounter {
    * Load comment count for a counter element
    */
   async loadCommentCount(element) {
+    // The Worker renders the count into the page when it renders the thread.
+    if (element.dataset.fedicommentCount !== undefined) {
+      return;
+    }
+
     const instance = element.dataset.instance;
     const statusId = element.dataset.statusId;
+    const platform = element.dataset.platform || 'mastodon';
 
     if (!instance || !statusId) {
       console.error('FediCommentCounter: Missing instance or statusId');
@@ -95,16 +107,17 @@ class FediCommentCounter {
     }
 
     // Check cache first
-    const cachedCount = this.getCachedCount(statusId);
+    const cacheKey = `${this.CACHE_VERSION}:${platform}:${statusId}`;
+    const cachedCount = this.getCachedCount(cacheKey);
     if (cachedCount !== null) {
       this.updateCounterDisplay(element, cachedCount);
       return;
     }
 
     // Fetch from API
-    const count = await this.fetchCommentCount(instance, statusId);
+    const count = await this.fetchCommentCount(instance, statusId, platform);
     if (count !== null) {
-      this.saveToCache(statusId, count);
+      this.saveToCache(cacheKey, count);
       this.updateCounterDisplay(element, count);
     }
   }

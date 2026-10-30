@@ -1,31 +1,41 @@
-# re-Terminal
+# re-Terminal (Helltop variant)
 
-## Welcome to Hugo Theme re-Terminal!
+This is the re-Terminal variant maintained for [Helltop.net](https://helltop.net). It is forked from
+[mtwb47/re-terminal](https://github.com/mtwb47/re-terminal), which is itself a fork of
+[Mirus's re-Terminal](https://github.com/mirus-ua/hugo-theme-re-terminal).
 
-Hello! I'm thrilled to announce a brand new fork of Hugo Theme Terminal, now officially known as Hugo Theme Re-Terminal!
+The retro terminal design and the upstream re-Terminal feature set are unchanged. This variant adds:
 
-As the maintainer, I'm excited to share that this theme will continue to evolve and receive updates with new features. Why? Because I use it myself! You can bet your last byte that any changes I make will be thoroughly tested and refined for real-world use.
+- **FediComment for Mastodon and Wafrn** — comment threads and counters understand both platforms.
+- **Edge-render friendly comments** — the comments partial emits `data-fedicomment-*` attributes and
+  keeps the client-side loader as a fallback, so a Worker can render the thread into the page.
+- **ListenBrainz dashboard** — `listenbrainz` and `recent` shortcodes for listening stats and a
+  compact now-playing card, fed from `data/listenbrainz/`.
+- **Smart typography** — a `typography.html` partial that turns `...` into an ellipsis and straight
+  quotes into curly quotes for display text from external sources.
+- **Wafrn icon** in the fediverse callout.
+- **Lightbox and fingerprinted assets** — click content images to enlarge; CSS and JS are
+  fingerprinted in production.
 
-This fork aims to breathe new life into the original Terminal theme, which was once a popular choice among Hugo enthusiasts. Unfortunately, it had been neglected over time. But no more! With re-Terminal, we're committed to keeping the spirit of the original alive while adding fresh perspectives and innovations.
+See [FEDICOMMENT.md](FEDICOMMENT.md) for the comment setup. The companion Worker that renders
+comments and the ListenBrainz dashboard at the edge lives in the
+[Helltop site repo](https://github.com/anoraktrend/Helltop), not in this theme.
 
-So, welcome aboard! I'm excited to have you join us on this journey as we shape the future of Hugo Theme re-Terminal together. Let's get started!
+![re-Terminal](images/screenshot.png)
 
----
+### DEMO - https://helltop.net
 
-![re-Terminal](https://github.com/mirus-ua/hugo-theme-re-terminal/blob/main/images/screenshot.png?raw=true)
+### ⚠️ This variant needs at least Hugo **Extended** v0.168.0.
 
-### DEMO - https://mtwb.blog
-
-### ⚠️ The theme needs at least Hugo **Extended** v0.128.0.
-
-re-Terminal before v2.1.0 may work with versions of HUGO less than v0.128.0 below to v0.90.0 if you change the min version manually in mod files, but I didn't test it
+The theme uses `.Site.Language.Locale`, which older Hugo versions do not provide. Upstream
+re-Terminal releases may still work with older Hugo versions.
 
 ---
 
 ## Table of Contents
 
 - [Features](#features)
-- [What's New in re-Terminal](#whats-new-in-re-terminal)
+- [What's different in this fork](#whats-different-in-this-fork)
 - [CSS Variables](#css-variables)
 - [Built-in shortcodes](#built-in-shortcodes)
 - [Code highlighting](#code-highlighting)
@@ -38,7 +48,7 @@ re-Terminal before v2.1.0 may work with versions of HUGO less than v0.128.0 belo
 - [How to edit the theme](#how-to-edit)
 - [Found a bug?](#bug)
 - [New cool idea or feature](#feature)
-- [Terminal theme user?](#terminal-theme-user)
+- [Using this theme?](#using-this-theme)
 - [License](#license)
 
 ## Features
@@ -54,7 +64,10 @@ re-Terminal before v2.1.0 may work with versions of HUGO less than v0.128.0 belo
 - **Archive page** with chronological post listing
 - **Image galleries** with lightbox support
 - **YouTube shortcode** for embedded videos
-- **FediComment** - Mastodon-based commenting system (no backend required)
+- **FediComment** — Mastodon and Wafrn commenting with platform-aware counters (no backend required; optional edge rendering)
+- **ListenBrainz shortcodes** for listening stats and a now-playing card
+- **Smart typography** partial for externally sourced display text
+- **CRT shortcode** for opt-in scanline/green-phosphor display blocks
 - **Customizable scrollbar** and selection styling
 - **Logo animations** and customization
 - **Light/dark theme toggle**
@@ -62,51 +75,36 @@ re-Terminal before v2.1.0 may work with versions of HUGO less than v0.128.0 belo
 - **Dropdown menus** and submenus
 - **Sticky menu** with configurable position (top, bottom, or none)
 
-## What's New in re-Terminal
+## What's different in this fork
 
-This fork includes extensive improvements and new features compared to the original Terminal theme:
+This variant is based on mtwb47/re-terminal and keeps the upstream feature set. The Helltop-specific
+changes are:
 
-### Design & Theming
-- **15 theme families** with dark and light variants (30 total themes):
-  - Gruvbox, One Dark, Night Owl, Material Palenight, Everforest
-  - Catppuccin, Nord, Rose Pine, Tokyo Night, Solarized
-  - High Contrast, Oxocarbon, Dracula, Monokai, Ayu
-- **Random theme option** - automatically select a random theme on each page load
-- **Theme switcher functionality** - dynamically change between color themes
-- **Light/dark mode toggle** - all themes support both variants
-- **Migrated from SCSS to CSS Native Variables** - brings super easy color customization via `style.css`
-- **Custom scrollbar** and selection background styling
-- **Logo animations** with customizable fonts and styling
-- **Improved responsive design** with enhanced mobile menu
+### Comments
 
-### Content Types & Features
-- **Link post type** - share and curate external links with special styling
-- **Image galleries** - with lightbox support for beautiful image displays
-- **YouTube shortcode** - easily embed YouTube videos
-- **Archive page** - unified chronological view of all post types (posts, links, images) with color-coded styling
-- **Comments counter** - display comment counts on pages
-- **Cover captions** (`coverCaption`) - add information about your article cover images
-- **Site top banner** - call to action banner support
+- `fediverse.platform` frontmatter accepts `mastodon` (default) or `wafrn`.
+- Wafrn threads are fetched from `/api/forum/:id`, and rewoots are filtered out.
+- Wafrn avatars are loaded through the instance's v2 avatar cache endpoint.
+- `comments.html` emits `data-fedicomment-*` attributes used by both the client-side fallback and
+  edge rendering.
+- `comments_counter.html` caches counts per platform and skips the API request when the count was
+  already rendered into the page.
 
-### Navigation & Menus
-- **Submenus** for the main menu (since v2.1.0)
-- **Footer menu** with extended footer partials
-- **Dropdown menu** support
-- **Mobile menu** improvements
+### Music
 
-### Integrations
-- **FediComment** - Self-hosted commenting via Mastodon - see [FEDICOMMENT.md](FEDICOMMENT.md)
-- **Last.fm shortcode** - display your music listening activity (requires Last.fm data via GitLab CI/CD or similar - not included with theme)
-- **Mastodon integration** - connect your Mastodon profile
-- **Analytics support** - easily add your analytics tracking
-- **RSS improvements** - better RSS feed generation
+- The `listenbrainz` shortcode renders top artists, recordings, releases, and listening activity
+  from `data/listenbrainz/`.
+- The `recent` shortcode renders the compact now-playing card from
+  `data/listenbrainz/recent.json` (it previously read Last.fm data).
+- Display text is passed through `layouts/partials/typography.html` for smart punctuation.
 
-### Developer Experience
-- **Removed all deprecated HUGO code** - fully compatible with modern Hugo
-- **Post base primitive** - flexible pages where you can embed your code
-- **Extended head/footer partials** - easy customization without modifying theme files
-- **Metadata system** - improved post metadata handling
-- **Table rendering fixes** - better table support and styling
+### Presentation and assets
+
+- Wafrn icon in the fediverse callout.
+- Content images open in a lightbox.
+- CSS and JS are fingerprinted in production.
+- Social/Open Graph images fall back from the page cover to the site cover to the favicon.
+- `assets/css/scanlines.css` provides the CRT/scanline styles used by the `crt` shortcode.
 
 ## CSS Variables
 
@@ -208,6 +206,16 @@ This content is hidden by default.
 {{< /collapse >}}
 ```
 
+### `crt`
+Display content in a CRT/scanline panel with green phosphor text. The styles live in
+`assets/css/scanlines.css` and are loaded by the theme.
+
+```go
+{{< crt >}}
+HELLTOP
+{{< /crt >}}
+```
+
 ### `youtube`
 Embed YouTube videos with responsive sizing.
 
@@ -236,20 +244,31 @@ Display blog statistics including total posts and word count.
 {{< wordcount >}}
 ```
 
-### `lastfm`
-Display Last.fm listening statistics including recent tracks, top tracks, and top artists.
-
-**Note:** Requires Last.fm data to be fetched via GitLab CI/CD or similar automation and saved to `data/lastfm/`. This functionality is not included with the theme.
+### `listenbrainz`
+Display the ListenBrainz dashboard: top artists, recordings, releases, and listening activity.
+Reads the JSON snapshots in `data/listenbrainz/`. Fetching those snapshots is left to the site (for
+example a CI script or a Worker cron job).
 
 ```go
-{{< lastfm >}}
+{{< listenbrainz >}}
 ```
 
 ### `recent`
-Display most recent Last.fm scrobble only (compact version).
+Display the most recent ListenBrainz listen as a compact now-playing card. Reads
+`data/listenbrainz/recent.json`.
 
 ```go
 {{< recent >}}
+```
+
+### `lastfm`
+Display Last.fm listening statistics including recent tracks, top tracks, and top artists.
+
+**Note:** This is the upstream shortcode. It requires Last.fm data saved to `data/lastfm/` and is
+not used by the Helltop variant.
+
+```go
+{{< lastfm >}}
 ```
 
 ## Code highlighting
@@ -266,7 +285,9 @@ A custom syntax highlighting based on PrismJS. All you need to do is to wrap you
 
 ## How to start
 
-You can download the theme manually by going to [https://github.com/mirus-ua/hugo-theme-re-terminal.git](https://github.com/mirus-ua/hugo-theme-re-terminal.git) and pasting it to `themes/re-terminal` in your root directory.
+You can download the theme manually from
+[https://github.com/anoraktrend/re-terminal](https://github.com/anoraktrend/re-terminal) and paste it
+into `themes/re-terminal` in your Hugo root directory.
 
 You can also choose **one of the 3 possibilities** to install the theme:
 
@@ -274,7 +295,7 @@ You can also choose **one of the 3 possibilities** to install the theme:
 2. as a standalone local directory
 3. as a git submodule
 
-⚠️ The theme needs at least Hugo **Extended** v0.128.x.
+⚠️ This variant needs at least Hugo **Extended** v0.168.0.
 
 ### Install theme as Hugo Module
 
@@ -284,7 +305,7 @@ You can also choose **one of the 3 possibilities** to install the theme:
 # you fetch the theme module.
 #
 # hugo mod init [your website/module name]
-hugo mod get github.com/mirus-ua/hugo-theme-re-terminal
+hugo mod get github.com/anoraktrend/re-terminal/v2
 ```
 
 and in your config file add:
@@ -292,28 +313,32 @@ and in your config file add:
 ```toml
 [module]
   # this is needed when you fetch the theme as a submodule to your repo.
-  # replacements = "github.com/mirus-ua/hugo-theme-re-terminal -> themes/re-terminal"
+  # replacements = "github.com/anoraktrend/re-terminal/v2 -> themes/re-terminal"
 [[module.imports]]
-  path = 'github.com/mirus-ua/hugo-theme-re-terminal'
+  path = 'github.com/anoraktrend/re-terminal/v2'
 ```
+
+This fork has no tagged releases, so Hugo Modules resolves a pseudo-version from `main`. Use the
+submodule or vendored options below if you want to pin a specific commit in your site repo.
 
 Keep in mind that the theme by default won't show up in the `themes` directory. This means that you are using the theme as it was on the repository at the moment you fetched it. Your local `go.sum` file keeps all the references. Read more about Hugo Modules in the [official documentation](https://gohugo.io/hugo-modules/).
 
 ### Install theme locally
 
 ```bash
-git clone https://github.com/mirus-ua/hugo-theme-re-terminal.git themes/re-terminal
+git clone https://github.com/anoraktrend/re-terminal.git themes/re-terminal
 ```
 
-This will clone the repository directly to the `themes/re-terminal` directory.
+This will clone the repository directly to the `themes/re-terminal` directory. The Helltop site
+uses this layout, with the theme vendored into the site repo.
 
 ### Install theme as a submodule
 
 ```bash
-git submodule add -f https://github.com/mirus-ua/hugo-theme-re-terminal.git themes/re-terminal
+git submodule add -f https://github.com/anoraktrend/re-terminal.git themes/re-terminal
 ```
 
-This will install the repository as a sumbodule in the `themes/re-terminal` directory.
+This will install the repository as a submodule in the `themes/re-terminal` directory.
 
 ⚠️ If you encounter any issues with:
 
@@ -337,7 +362,7 @@ The theme doesn't require any advanced configuration. Just copy:
 
 ```toml
 baseurl = "/"
-languageCode = "en-us"
+locale = "en-us"
 # Add it only if you keep the theme in the `themes` directory.
 # Remove it if you use the theme as a remote Hugo Module.
 theme = "re-terminal"
@@ -402,7 +427,7 @@ pagination.pagerSize = 5
   # [params.banner]
   # dismissible = false
   # text = "Check it out on GitHub"
-  # url = "https://github.com/mirus-ua/hugo-theme-re-terminal"
+  # url = "https://github.com/anoraktrend/re-terminal"
 
 [params.twitter]
   # set Twitter handles for Twitter cards
@@ -451,13 +476,14 @@ pagination.pagerSize = 5
         name = "Showcase"
         url = "/showcase"
 
-[module]
-  # In case you would like to make changes to the theme and keep it locally in you repository,
-  # uncomment the line below (and correct the local path if necessary).
-  # --
-  # replacements = "github.com/mirus-ua/hugo-theme-re-terminal -> themes/re-terminal"
-[[module.imports]]
-  path = 'github.com/mirus-ua/hugo-theme-re-terminal'
+# Only needed when installing the theme as a Hugo Module. Skip this when
+# the theme lives in themes/re-terminal and `theme = "re-terminal"` is set.
+# [module]
+#   # In case you would like to make changes to the theme and keep it locally in your repository,
+#   # uncomment the line below (and correct the local path if necessary).
+#   # replacements = "github.com/anoraktrend/re-terminal/v2 -> themes/re-terminal"
+# [[module.imports]]
+#   path = 'github.com/anoraktrend/re-terminal/v2'
 ```
 
 to `config.toml` file in your Hugo root directory and change params fields. In case you need, here's [a YAML version](https://gist.github.com/panr/9eeea6f595c257febdadc11763e3a6d1).
@@ -466,7 +492,7 @@ to `config.toml` file in your Hugo root directory and change params fields. In c
 
 ## Post archetype
 
-See the default `post` file params supported by the theme — https://github.com/mirus-ua/hugo-theme-re-terminal/blob/main/archetypes/posts.md
+See the default `post` file params supported by the theme — https://github.com/anoraktrend/re-terminal/blob/main/archetypes/posts.md
 
 ## Content Types
 
@@ -547,14 +573,14 @@ color = ""
 
 ## Add-ons
 
-- **Comments** — for adding comments to your blog posts please take a look at `layouts/partials/comments.html` https://github.com/mirus-ua/hugo-theme-re-terminal/blob/main/layouts/partials/comments.html.
-- **Comments counter** — for adding comments counter to your blog posts please take a look at `layouts/partials/comments_counter.html` https://github.com/mirus-ua/hugo-theme-re-terminal/blob/main/layouts/partials/comments_counter.html.
-- **Extended Head** — please take a look at `layouts/partials/extended_head.html` https://github.com/mirus-ua/hugo-theme-re-terminal/blob/main/layouts/partials/extended_head.html
-- **Extended Footer** — please take a look at `layouts/partials/extended_footer.html` https://github.com/mirus-ua/hugo-theme-re-terminal/blob/main/layouts/partials/extended_footer.html
+- **Comments** — for adding comments to your blog posts please take a look at `layouts/partials/comments.html` https://github.com/anoraktrend/re-terminal/blob/main/layouts/partials/comments.html and [FEDICOMMENT.md](FEDICOMMENT.md).
+- **Comments counter** — for adding comments counter to your blog posts please take a look at `layouts/partials/comments_counter.html` https://github.com/anoraktrend/re-terminal/blob/main/layouts/partials/comments_counter.html.
+- **Extended Head** — please take a look at `layouts/partials/extended_head.html` https://github.com/anoraktrend/re-terminal/blob/main/layouts/partials/extended_head.html
+- **Extended Footer** — please take a look at `layouts/partials/extended_footer.html` https://github.com/anoraktrend/re-terminal/blob/main/layouts/partials/extended_footer.html
 
 ### Low-level add-ons
 
-- **Post base** — Renders bare minimum of posts' content. For motivation and details take a look at https://github.com/mirus-ua/hugo-theme-re-terminal/blob/main/layouts/partials/single_basic.html
+- **Post base** — Renders bare minimum of posts' content. For motivation and details take a look at https://github.com/anoraktrend/re-terminal/blob/main/layouts/partials/single_basic.html
 
 ## How to edit the theme `<a id="how-to-edit" />`
 
@@ -574,28 +600,18 @@ If you have the theme files in the theme directory, then you can directly edit a
 
 ## Found a bug? `<a id="bug" />`
 
-If you spot any bugs, please use [Issue Tracker](https://github.com/mirus-ua/hugo-theme-re-terminal/issues) or create a new [Pull Request](https://github.com/mirus-ua/hugo-theme-re-terminal/pulls) to fix the issue.
+If you spot any bugs in this variant, please use the fork's [issue tracker](https://github.com/anoraktrend/re-terminal/issues) or open a [pull request](https://github.com/anoraktrend/re-terminal/pulls). Issues in the base theme that also affect upstream should go to [mtwb47/re-terminal](https://github.com/mtwb47/re-terminal/issues) or [mirus-ua/hugo-theme-re-terminal](https://github.com/mirus-ua/hugo-theme-re-terminal/issues).
 
 ## New cool idea or feature? `<a id="feature" />`
 
-The theme is in constant development since 2019 and has got many cool features that helped many of you and made the theme better. But there were also many features that I wasn't sure about because I want to keep the theme as simple as possible.
+This variant is maintained for Helltop. Open an issue or pull request on the
+[fork](https://github.com/anoraktrend/re-terminal) if you want to change it here. If the change is
+also useful to the base theme, send it upstream to [mtwb47/re-terminal](https://github.com/mtwb47/re-terminal)
+or [mirus-ua/hugo-theme-re-terminal](https://github.com/mirus-ua/hugo-theme-re-terminal).
 
-So, let's say you have an idea of how to extend the theme. That's cool and you're welcome to do that, just follow these steps:
+## Using this theme?
 
-- fork the theme
-- implement the feature
-- write an instruction how to use the feature
-- give a working example of the implementation for other users
-- add info about your work to `COMMUNITY-FEATURES.md`
-- make a PR with edited `COMMUNITY-FEATURES.md`
-
-This will help keeping the theme close to its roots, and also allow anyone who wishes to improve it and match their needs, to do whatever they want.
-
-Sounds OK? Cool, let's rock! 🤘
-
-## Terminal theme user?
-
-I'd be happy to know more about you and what you are doing. If you want to share it, please make a contribution and [add your site to the list](https://github.com/mirus-ua/hugo-theme-re-terminal/blob/main/USERS.md)! 🤗
+If you use this variant, feel free to add your site to [USERS.md](USERS.md).
 
 ## Changelog
 
@@ -605,6 +621,9 @@ For a detailed list of all changes, improvements, and new features, please see [
 
 Copyright © 2019-2022 Radosław Kozieł ([@panr](https://twitter.com/panr))
 
-Copyright © 2024-now Mirus
+Copyright © 2024 Mirus
 
-The theme is released under the MIT License. Check the [original theme license](https://github.com/mirus-ua/hugo-theme-re-terminal/blob/main/LICENSE.md) for additional licensing information.
+Fork modifications © 2026 Lucy Ada Randall
+
+The theme is released under the MIT License. See [LICENSE.md](LICENSE.md) for the full text and
+upstream attribution.

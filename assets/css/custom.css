@@ -1548,6 +1548,12 @@ details[open] > *:not(summary) {
    LISTENBRAINZ DASHBOARD STYLES
    ═══════════════════════════════════════════════════════════════════════════ */
 
+/* The Worker swaps the contents of this element for a fresh edge-rendered
+   dashboard. The static Hugo output inside it is the fallback. */
+listenbrainz-dashboard {
+  display: block;
+}
+
 .lb-dashboard {
   --lb-accent: var(--accent);
   --lb-bg-card: var(--bg-tertiary);
@@ -3034,6 +3040,20 @@ a.read-more:active {
 
 .fedicomment-content p:last-child {
   margin-bottom: 0;
+}
+
+.fedicomment-content img {
+  max-width: 100%;
+  height: auto;
+}
+
+.fedicomment-content img.emoji,
+.fedicomment-content img.custom-emoji,
+.fedicomment-content img.fedicomment-emoji {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  margin: 0 2px;
 }
 
 .fedicomment-content a {

@@ -1,4 +1,5 @@
 # Meet the users of re-Terminal theme!
+- https://helltop.net/ **Lucy Ada Randall** (Helltop variant maintainer)
 - https://nebrowser.com/ **Mirus** (Team/Tech Lead)
 
 # Meet the users of OG Terminal theme!
