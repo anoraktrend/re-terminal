@@ -67,7 +67,7 @@ re-Terminal releases may still work with older Hugo versions.
 - **FediComment** — Mastodon and Wafrn commenting with platform-aware counters (no backend required; optional edge rendering)
 - **ListenBrainz shortcodes** for listening stats and a now-playing card
 - **Smart typography** partial for externally sourced display text
-- **CRT shortcode** for opt-in scanline/green-phosphor display blocks
+- **CRT styling** for the site logo and 404 page, plus a `crt` shortcode for display blocks
 - **Customizable scrollbar** and selection styling
 - **Logo animations** and customization
 - **Light/dark theme toggle**
@@ -103,8 +103,10 @@ changes are:
 - Wafrn icon in the fediverse callout.
 - Content images open in a lightbox.
 - CSS and JS are fingerprinted in production.
+- The SCSS pipeline uses Dart Sass; LibSass is no longer used.
 - Social/Open Graph images fall back from the page cover to the site cover to the favicon.
-- `assets/css/scanlines.css` provides the CRT/scanline styles used by the `crt` shortcode.
+- `assets/css/scanlines.css` provides the CRT/scanline styles used by the logo, the 404 page, and
+  the `crt` shortcode.
 
 ## CSS Variables
 
@@ -208,7 +210,8 @@ This content is hidden by default.
 
 ### `crt`
 Display content in a CRT/scanline panel with green phosphor text. The styles live in
-`assets/css/scanlines.css` and are loaded by the theme.
+`assets/css/scanlines.css` and are loaded by the theme. The site logo and 404 page use the same
+treatment by default.
 
 ```go
 {{< crt >}}
