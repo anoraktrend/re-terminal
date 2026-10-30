@@ -67,7 +67,8 @@ re-Terminal releases may still work with older Hugo versions.
 - **FediComment** — Mastodon and Wafrn commenting with platform-aware counters (no backend required; optional edge rendering)
 - **ListenBrainz shortcodes** for listening stats and a now-playing card
 - **Smart typography** partial for externally sourced display text
-- **CRT styling** for the site logo and 404 page, plus a `crt` shortcode for display blocks
+- **CRT styling** with animated scanlines for the site logo and 404 page, plus a `crt` shortcode for
+  display blocks
 - **Customizable scrollbar** and selection styling
 - **Logo animations** and customization
 - **Light/dark theme toggle**
@@ -209,9 +210,9 @@ This content is hidden by default.
 ```
 
 ### `crt`
-Display content in a CRT/scanline panel with green phosphor text. The styles live in
-`assets/css/scanlines.css` and are loaded by the theme. The site logo and 404 page use the same
-treatment by default.
+Display content in a CRT/scanline panel with green phosphor text and animated scanlines. The styles
+live in `assets/css/scanlines.css` and are loaded by the theme. The site logo and 404 page use the
+same treatment by default.
 
 ```go
 {{< crt >}}
