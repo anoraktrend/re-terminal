@@ -104,7 +104,7 @@ changes are:
 - Wafrn icon in the fediverse callout.
 - Content images open in a lightbox.
 - CSS and JS are fingerprinted in production.
-- The SCSS pipeline uses Dart Sass; LibSass is no longer used.
+- The SCSS pipeline uses Dart Sass with `@use` modules; LibSass is no longer used.
 - Social/Open Graph images fall back from the page cover to the site cover to the favicon.
 - `assets/css/scanlines.css` provides the CRT/scanline styles used by the logo, the 404 page, and
   the `crt` shortcode.
